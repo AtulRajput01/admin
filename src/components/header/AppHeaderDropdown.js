@@ -4,43 +4,44 @@ import {
   CBadge,
   CDropdown,
   CDropdownDivider,
-  CDropdownHeader,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react';
 import {
-  cilBell,
+  cilStar,
   cilCreditCard,
-  cilCommentSquare,
-  cilEnvelopeOpen,
-  cilFile,
   cilLockLocked,
-  cilSettings,
-  cilTask,
   cilUser,
 } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios'; // Import axios for HTTP requests
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import avatar8 from './../../assets/images/avatars/8.jpg';
 
-const API_URL = 'http://localhost:3002/api/logout'; // Backend API URL
-const token = localStorage.getItem('token');
+const API_URL = 'http://54.244.180.151:3002/';
+
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await axios.post(API_URL,{},{
-        headers: {
-          token: token
-        }
-      });
-
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.warn('No token found in localStorage');
+        return;
+      }
       localStorage.removeItem('token');
       navigate('/login');
+    } catch (error) {
+      console.error('Logout Error:', error);
+    }
+  };
+  
+  const subscription = async () => {
+    try {
+      navigate('/subscription');
     } catch (error) {
       console.error('Logout Error:', error);
     }
@@ -52,66 +53,26 @@ const AppHeaderDropdown = () => {
         <CAvatar src={avatar8} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>
-        <CDropdownItem href="#">
-          <CIcon icon={cilBell} className="me-2" />
-          Updates
-          <CBadge color="info" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilEnvelopeOpen} className="me-2" />
-          Messages
-          <CBadge color="success" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilTask} className="me-2" />
-          Tasks
-          <CBadge color="danger" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilCommentSquare} className="me-2" />
-          Comments
-          <CBadge color="warning" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownHeader className="bg-body-secondary fw-semibold my-2">Settings</CDropdownHeader>
         <CDropdownItem href="#">
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilSettings} className="me-2" />
-          Settings
+        <CDropdownItem  onClick={subscription} role="button" style={{ cursor: 'pointer' }}>
+        <CIcon icon={cilStar} className="me-2" />
+          Subscription Plan
         </CDropdownItem>
-        <CDropdownItem href="#">
+        <CDropdownItem role="button" style={{ cursor: 'pointer' }}>
           <CIcon icon={cilCreditCard} className="me-2" />
           Payments
           <CBadge color="secondary" className="ms-2">
             42
           </CBadge>
         </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilFile} className="me-2" />
-          Projects
-          <CBadge color="primary" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
         <CDropdownDivider />
-<Link to="/login" style={{textDecoration: 'none'}}>
-        <CDropdownItem onClick={handleLogout}>
+        <CDropdownItem onClick={handleLogout} role="button" style={{ cursor: 'pointer' }}>
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout
         </CDropdownItem>
-        </Link>
-
       </CDropdownMenu>
     </CDropdown>
   );

@@ -51,7 +51,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.post("http://localhost:3002/api/vendor/getVendor",{status:'ALL'});
+      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor",{status:'ALL'});
       setUsers(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -63,8 +63,8 @@ const UserManagement = () => {
 
   // const handleDelete = async (id) => {
   //   try {
-  //     await axios.delete(`http://localhost:3002/api/ShopDetails/deleteShop/${id}`);
-  //     const response = await axios.get(`http://localhost:3002/api/ShopDetails/${selectUser}`);
+  //     await axios.delete(`http://54.244.180.151:3002/api/ShopDetails/deleteShop/${id}`);
+  //     const response = await axios.get(`http://54.244.180.151:3002/api/ShopDetails/${selectUser}`);
   //     setSelectedVendor(response.data);
   //   } catch (error) {
   //     setError("Error deleting user");
@@ -75,7 +75,7 @@ const UserManagement = () => {
   
   const handleViewOrder = async(user) => {
     try {
-      const response = await axios.get(`http://localhost:3002/api/ShopDetails/shop/${user._id}`);
+      const response = await axios.get(`http://54.244.180.151:3002/api/ShopDetails/shop/${user._id}`);
       setSelectedVendor(response.data);
       setVisible(true);
       setSelectUser(user._id)
@@ -90,17 +90,17 @@ const UserManagement = () => {
   //   setChatVisible(true);
   // };
   const accepetVendor=async(id,status)=>{
-   const response=await axios.post('http://localhost:3002/api/vendor/approveVendor',{id,status})
+   const response=await axios.post('http://54.244.180.151:3002/api/vendor/approveVendor',{id,status})
    fetchUsers();
   }
   const rejectVendor=async(id,status)=>{
-    const response=await axios.post('http://localhost:3002/api/vendor/approveVendor',{id,status})
+    const response=await axios.post('http://54.244.180.151:3002/api/vendor/approveVendor',{id,status})
     fetchUsers();
    }
  
   const handleFilterChange = async(status) => {
     setFilter(status)
-    const response=await axios.post('http://localhost:3002/api/vendor/getVendor',{status});
+    const response=await axios.post('http://54.244.180.151:3002/api/vendor/getVendor',{status});
     setUsers(response.data.data);
     setLoading(false);
   };
@@ -109,8 +109,8 @@ const UserManagement = () => {
       id,
       status
     }
-    const res=await axios.post('http://localhost:3002/api/ShopDetails/verifyShop',data)
-    const response = await axios.get(`http://localhost:3002/api/ShopDetails/shop/${selectUser}`);
+    const res=await axios.post('http://54.244.180.151:3002/api/ShopDetails/verifyShop',data)
+    const response = await axios.get(`http://54.244.180.151:3002/api/ShopDetails/shop/${selectUser}`);
     setSelectedVendor(response.data);
   }
 
@@ -220,6 +220,7 @@ const UserManagement = () => {
         <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Contact Number</CTableHeaderCell>
         <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Available From</CTableHeaderCell>
         <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Available To</CTableHeaderCell>
+        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Subscription</CTableHeaderCell>
         <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Address</CTableHeaderCell>
         <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Shop Logo</CTableHeaderCell>
         <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Action</CTableHeaderCell>
@@ -241,10 +242,20 @@ const UserManagement = () => {
               <CTableDataCell style={{ textAlign: "center" }}>{vendor.contactNumber || "null"}</CTableDataCell>
               <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableFrom ? `${vendor.availableFrom} ${vendor.availableFromPeriod}` : "null"}</CTableDataCell>
               <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableTo ? `${vendor.availableTo} ${vendor.availableToPeriod}` : "null"}</CTableDataCell>
+              {/* <CTableDataCell style={{ textAlign: "center" }}>{vendor.isSubscription || "null"}</CTableDataCell> */}
+              <CTableDataCell
+  style={{
+    textAlign: "center",
+    backgroundColor: vendor.isSubscription ? "lightgreen" : "white",
+    color: vendor.isSubscription ? "black" : "gray"  // Optional: change text color for better readability
+  }}
+>
+  {vendor.isSubscription ? "Subscribed" : "Not Subscribed"}
+</CTableDataCell>
               <CTableDataCell style={{ textAlign: "center" }}>{vendor.address || "null"}</CTableDataCell>
               <CTableDataCell style={{ textAlign: "center" }}>
                 {vendor.shopLogo ? (
-                  <img src={`http://localhost:3002/${vendor.shopLogo}`} alt="Shop Logo" style={{ width: '50px', height: '50px' }} />
+                  <img src={`http://54.244.180.151:3002/${vendor.shopLogo}`} alt="Shop Logo" style={{ width: '50px', height: '50px' }} />
                 ) : "null"}
               </CTableDataCell>
               <CTableDataCell style={{ textAlign: "center" }}>
