@@ -8,6 +8,7 @@ const VendorManagement = React.lazy(() => import('./views/vendorManagement/vendo
 const New = React.lazy(() => import('./views/vendorManagement/new'))
 const AnalyticsReporting = React.lazy(() => import('./views/analytics&Reporting/Analytics&Reporting'))
 const Subscription=React.lazy(()=>import('./views/subscription/Subscription'))
+const Payment=React.lazy(()=>import('./views/paymeentDetails/payments'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -18,6 +19,7 @@ const routes = [
   { path: '/new', name: 'New', element: New },
   { path: '/analytics&Reporting', name: 'Analytics&Reporting', element: AnalyticsReporting },
   { path: '/subscription', name: 'Subscription', element: Subscription },
+  { path: '/payments', name: 'Payment', element: Payment },
 ]
 
 export default routes

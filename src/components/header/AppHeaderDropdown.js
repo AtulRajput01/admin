@@ -20,7 +20,7 @@ import axios from 'axios';
 
 import avatar8 from './../../assets/images/avatars/8.jpg';
 
-const API_URL = 'http://54.244.180.151:3002/';
+const API_URL = 'http://localhost:3002/';
 
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();
@@ -47,6 +47,14 @@ const AppHeaderDropdown = () => {
     }
   };
 
+  const payments = async () => {
+    try {
+      navigate('/payments');
+    } catch (error) {
+      console.error('Logout Error:', error);
+    }
+  };
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
@@ -61,7 +69,7 @@ const AppHeaderDropdown = () => {
         <CIcon icon={cilStar} className="me-2" />
           Subscription Plan
         </CDropdownItem>
-        <CDropdownItem role="button" style={{ cursor: 'pointer' }}>
+        <CDropdownItem  onClick={payments} role="button" style={{ cursor: 'pointer' }}>
           <CIcon icon={cilCreditCard} className="me-2" />
           Payments
           <CBadge color="secondary" className="ms-2">

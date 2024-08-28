@@ -20,7 +20,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons';
 // Import your image here
 import logoImage from './logo.png'; // Replace with your actual image path
 
-const API_URL = 'http://54.244.180.151:3002/api/admin/login'; // Backend API URL
+const API_URL = 'http://localhost:3002/api/admin/login'; // Backend API URL
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
