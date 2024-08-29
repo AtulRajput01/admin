@@ -65,7 +65,7 @@ const AdminLogin = () => {
                   </div>
                   <CForm onSubmit={handleSubmit}>
                     <h1>Welcome!</h1>
-                    <p className="text-body-secondary">Admin Sign In</p>
+                    <p className="text-light" >Admin Sign In</p>
                     {error && <p className="text-danger">{error}</p>}
                     <CInputGroup className="mb-3">
                       <CInputGroupText>

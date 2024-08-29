@@ -1,9 +1,11 @@
 import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
-const Oversight = React.lazy(() => import('./views/oversight/Oversight'))
 const UserManagement = React.lazy(() => import('./views/userManagement/UserManagement'))
 const VendorManagement = React.lazy(() => import('./views/vendorManagement/vendorManagement'))
+const Species=React.lazy(()=>import('./views/speciesandextension/species'))
+const Extension=React.lazy(()=>import('./views/speciesandextension/extension'))
+
 
 const New = React.lazy(() => import('./views/vendorManagement/new'))
 const AnalyticsReporting = React.lazy(() => import('./views/analytics&Reporting/Analytics&Reporting'))
@@ -13,7 +15,8 @@ const Payment=React.lazy(()=>import('./views/paymeentDetails/payments'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/oversight', name: 'Oversight', element: Oversight },
+  { path: '/Species', name: 'Species', element: Species },
+  { path: '/Extension', name: 'Extension', element: Extension },
   { path: '/manage-users', name: 'Manage Users', element: UserManagement },
   { path: '/manage-vendors', name: 'Manage Vendors', element: VendorManagement },
   { path: '/new', name: 'New', element: New },

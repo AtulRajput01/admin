@@ -39,21 +39,21 @@ const AppHeaderDropdown = () => {
     }
   };
   
-  const subscription = async () => {
-    try {
-      navigate('/subscription');
-    } catch (error) {
-      console.error('Logout Error:', error);
-    }
-  };
+  // const subscription = async () => {
+  //   try {
+  //     navigate('/subscription');
+  //   } catch (error) {
+  //     console.error('Logout Error:', error);
+  //   }
+  // };
 
-  const payments = async () => {
-    try {
-      navigate('/payments');
-    } catch (error) {
-      console.error('Logout Error:', error);
-    }
-  };
+  // const payments = async () => {
+  //   try {
+  //     navigate('/payments');
+  //   } catch (error) {
+  //     console.error('Logout Error:', error);
+  //   }
+  // };
 
   return (
     <CDropdown variant="nav-item">
@@ -65,7 +65,7 @@ const AppHeaderDropdown = () => {
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </CDropdownItem>
-        <CDropdownItem  onClick={subscription} role="button" style={{ cursor: 'pointer' }}>
+        {/* <CDropdownItem  onClick={subscription} role="button" style={{ cursor: 'pointer' }}>
         <CIcon icon={cilStar} className="me-2" />
           Subscription Plan
         </CDropdownItem>
@@ -75,7 +75,7 @@ const AppHeaderDropdown = () => {
           <CBadge color="secondary" className="ms-2">
             42
           </CBadge>
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownDivider />
         <CDropdownItem onClick={handleLogout} role="button" style={{ cursor: 'pointer' }}>
           <CIcon icon={cilLockLocked} className="me-2" />
