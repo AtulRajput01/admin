@@ -41,7 +41,7 @@ const Extension = () => {
     // Fetch extensions data when the component mounts
     const fetchExtensions = async () => {
       try {
-        const response = await axios.get("http://54.244.180.151:3002/api/extension/getAll");
+        const response = await axios.get("http://54.244.180.151:3002/api/Extension/getAll");
         setExtensions(response.data.data); // Assuming the API response contains the extensions data
       } catch (err) {
         setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
