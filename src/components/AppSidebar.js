@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import '../../src/scss/common.css'
 
 import {
   CCloseButton,
@@ -15,7 +16,7 @@ import { AppSidebarNav } from './AppSidebarNav'
 
 // import { logo } from 'src/assets/brand/logo'
 
-import huntLogo from 'src/assets/brand/logo.png'
+import huntLogo from '../../public/logo/tlogo1.png'
 
 import { sygnet } from 'src/assets/brand/sygnet'
 
@@ -29,14 +30,14 @@ const AppSidebar = () => {
 
   return (
     <CSidebar 
-      className="border-end"
-      colorScheme="dark"
+      className="border-end image"
       position="fixed"
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
+      style={{background: "url('../../public/logo/tbg.png')"}}
     >
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">

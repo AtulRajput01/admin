@@ -22,11 +22,13 @@ import {
   CCol,
   CPagination,
   CPaginationItem,
+  CFormSelect 
 } from "@coreui/react";
 
 const Extension = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [extensions, setExtensions] = useState([]);
+  const [speciesOptions, setSpeciesOptions] = useState([]); // For species dropdown
   const [formData, setFormData] = useState({
     extensionName: "",
     extensionDescription: "",
@@ -50,6 +52,27 @@ const Extension = () => {
 
     fetchExtensions();
   }, []);
+
+  useEffect(() => {
+    // Fetch species data when the form becomes visible
+    if (formVisible) {
+      const fetchSpecies = async () => {
+        try {
+          const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories/"); // Adjust the URL as needed
+          setSpeciesOptions(response.data.data);
+          console.log("111", response.data.data);
+          
+        } catch (err) {
+          setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
+        }
+      };
+
+      fetchSpecies();
+    }
+  }, [formVisible]);
+
+  console.log("data", speciesOptions);
+  
 
   const handleChange = (e) => {
     const { id, value, files } = e.target;
@@ -192,6 +215,22 @@ const Extension = () => {
                 value={formData.price}
                 onChange={handleChange}
               />
+            </CCol>
+             <CCol md={6}>
+              <CFormSelect
+                id="species"
+                label="Species"
+                value={formData.species}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select species</option>
+                {speciesOptions.map((species) => (
+                  <option key={species.id} value={species.name}>
+                    {species.name}
+                  </option>
+                ))}
+              </CFormSelect>
             </CCol>
             <CCol md={6}>
               <CFormInput
