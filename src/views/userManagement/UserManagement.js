@@ -55,7 +55,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/api/vendor/getUser");
+      const response = await axios.get("http://54.244.180.151:3002/api/vendor/getUser");
       // console.log(response.data.data)
       setUsers(response.data.data);
 
@@ -67,7 +67,7 @@ const UserManagement = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3002/api/vendor/deleteUser/${id}`);
+      await axios.delete(`http://54.244.180.151:3002/api/vendor/deleteUser/${id}`);
       setUsers(users.filter((user) => user._id !== id));
     } catch (error) {
       setError("Error deleting user");
@@ -79,7 +79,7 @@ const UserManagement = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3002/api/user/vendor/register",
+        "http://54.244.180.151:3002/api/user/vendor/register",
         formData
       );
       setFormVisible(false);
@@ -105,7 +105,7 @@ const UserManagement = () => {
     event.preventDefault();
     const { _id } = selectedUser;
     try {
-      await axios.put(`http://localhost:3002/api/vendor/user/${_id}`, formData);
+      await axios.put(`http://54.244.180.151:3002/api/vendor/user/${_id}`, formData);
       setEditVisible(false);
       setFormData();
       fetchUsers(); // Fetch the latest data after updating

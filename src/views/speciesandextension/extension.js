@@ -34,6 +34,7 @@ const Extension = () => {
     extensionDescription: "",
     extensionImage: null,
     price: "",
+    species:"",
     role: "admin",
     shopId: "", // Optional
   });
@@ -43,8 +44,8 @@ const Extension = () => {
     // Fetch extensions data when the component mounts
     const fetchExtensions = async () => {
       try {
-        const response = await axios.get("http://localhost:3002/api/Extension/getAll");
-        setExtensions(response.data.data); // Assuming the API response contains the extensions data
+        const response = await axios.get("http://54.244.180.151:3002/api/Extension/getAll");
+        setExtensions(response.data.data);
       } catch (err) {
         setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
       }
@@ -59,9 +60,7 @@ const Extension = () => {
       const fetchSpecies = async () => {
         try {
           const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories/"); // Adjust the URL as needed
-          setSpeciesOptions(response.data.data);
-          console.log("111", response.data.data);
-          
+          setSpeciesOptions(response.data);
         } catch (err) {
           setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
         }
@@ -71,8 +70,6 @@ const Extension = () => {
     }
   }, [formVisible]);
 
-  console.log("data", speciesOptions);
-  
 
   const handleChange = (e) => {
     const { id, value, files } = e.target;
@@ -86,6 +83,7 @@ const Extension = () => {
     formDataToSend.append("extensionDescription", formData.description);
     formDataToSend.append("extensionImage", formData.extensionImage);
     formDataToSend.append("price", formData.price);
+    formDataToSend.append("specie", formData.species);
     formDataToSend.append("role", formData.role);
     
     // Append shopId only if the user is a vendor
@@ -94,7 +92,7 @@ const Extension = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3002/api/extension/addExtension", formDataToSend, {
+      const response = await axios.post("http://54.244.180.151:3002/api/extension/addExtension", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -113,6 +111,7 @@ const Extension = () => {
       extensionDescription: "",
       extensionImage: null,
       price: "",
+      species:"",
       role: "admin",
       shopId: "", // Reset shopId as well
     });
@@ -136,6 +135,9 @@ const Extension = () => {
                     S.No
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
+                   Species
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
                     Name
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
@@ -153,6 +155,9 @@ const Extension = () => {
                       {index + 1}
                     </CTableHeaderCell>
                     <CTableDataCell style={{ textAlign: "center" }}>
+                      {extension.specie || "null"}
+                    </CTableDataCell>
+                    <CTableDataCell style={{ textAlign: "center" }}>
                       {extension.extensionName || "null"}
                     </CTableDataCell>
                     <CTableDataCell style={{ textAlign: "center" }}>
@@ -161,7 +166,7 @@ const Extension = () => {
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {extension.image && (
                         <img
-                          src={`http://localhost:3002/${extension.image}`} // Update this path according to your API
+                          src={`http://54.244.180.151:3002/${extension.image}`} // Update this path according to your API
                           alt={extension.extensionName}
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />
