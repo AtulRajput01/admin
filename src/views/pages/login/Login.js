@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../../../scss/common.css'
 import {
   CButton,
   CCard,
@@ -18,7 +19,7 @@ import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilUser } from '@coreui/icons';
 
 // Import your image here
-import logoImage from './logo.png'; // Replace with your actual image path
+import logoImage from '../../../../public/logo/tlogo1.png'; // Replace with your actual image path
 
 const API_URL = 'http://localhost:3002/api/admin/login'; // Backend API URL
 
@@ -57,14 +58,14 @@ const AdminLogin = () => {
         <CRow className="justify-content-center" >
           <CCol style={{maxWidth: '37%'}}>
             <CCardGroup>
-              <CCard className="p-4 bg-dark-gray" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', color: 'white'}}  >
+              <CCard className="p-4 bg-dark-gray image" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', color: 'white'}}  >
                 <CCardBody className="text-center">
                   {/* Insert image in the center */}
                   <div className="mb-4">
                     <img src={logoImage} alt="Logo" style={{ maxWidth: '45%', height: 'auto' }} />
                   </div>
                   <CForm onSubmit={handleSubmit}>
-                    <h1>Welcome!</h1>
+                    <h1 className='text-dark'>Welcome!</h1>
                     <p className="text-light" >Admin Sign In</p>
                     {error && <p className="text-danger">{error}</p>}
                     <CInputGroup className="mb-3">
@@ -95,7 +96,7 @@ const AdminLogin = () => {
                     </CInputGroup>
                     <CCol>
                       <CCol>
-                        <CButton type="submit" color="primary" className="px-4">
+                        <CButton type="submit" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', color: 'white'}}  className="px-4">
                           Login
                         </CButton>
                       </CCol>
