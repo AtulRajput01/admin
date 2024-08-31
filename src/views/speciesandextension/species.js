@@ -39,7 +39,7 @@ const Species = () => {
     const fetchSpecies = async () => {
       try {
         const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories");
-        setSpecies(response.data); // Assuming the API response contains the species data
+        setSpecies(response.data.data); // Assuming the API response contains the species data
       } catch (err) {
         setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
       }
