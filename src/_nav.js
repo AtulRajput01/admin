@@ -69,7 +69,12 @@ const _nav = [
         component: CNavItem,
         name: 'Broadcast',
         to: '/broadcast',
-      }
+      },
+      {
+        component: CNavItem,
+        name: 'Feedback',
+        to: '/feedback',
+      },
     ],
   },
 ]

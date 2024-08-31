@@ -12,7 +12,10 @@ const AnalyticsReporting = React.lazy(() => import('./views/analytics&Reporting/
 const Subscription=React.lazy(()=>import('./views/subscription/Subscription'))
 const Payment=React.lazy(()=>import('./views/paymeentDetails/payments'))
 const ContactUs=React.lazy(()=>import('./views/support/contactUs'))
-const Broadcast=React.lazy(()=>import('./views/support/feedback'))
+const Broadcast=React.lazy(()=>import('./views/support/brodcast'))
+const feedback=React.lazy(()=>import('./views/support/feedback'))
+
+
 
 
 
@@ -29,7 +32,7 @@ const routes = [
   { path: '/payments', name: 'Payment', element: Payment },
   { path: '/contactUs', name: 'ContactUs', element: ContactUs },
   { path: '/broadcast', name: 'Broadcast', element: Broadcast },
-
+  { path: '/feedback', name: 'Feedback', element: feedback },
 
 ]
 
