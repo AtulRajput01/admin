@@ -37,7 +37,7 @@ const AppSidebar = () => {
       onVisibleChange={(visible) => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
-      style={{background: "url('../../public/logo/tbg.png')"}}
+      style={{background: "url('../../logo/tbg.png')"}}
     >
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">

@@ -54,7 +54,24 @@ const _nav = [
     name: 'Manage payments',
     to: '/payments',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-  }
+  },
+  {
+    component: CNavGroup,
+    name: 'Support',
+    icon: <CIcon icon={cilCheck} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Contact Us',
+        to: '/contactUs',
+      },
+      {
+        component: CNavItem,
+        name: 'Feedback',
+        to: '/feedback',
+      }
+    ],
+  },
 ]
 
 export default _nav
