@@ -59,8 +59,8 @@ const Extension = () => {
     if (formVisible) {
       const fetchSpecies = async () => {
         try {
-          const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories/"); // Adjust the URL as needed
-          setSpeciesOptions(response.data);
+          const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories/");
+          setSpeciesOptions(response.data.data);
         } catch (err) {
           setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
         }
