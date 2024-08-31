@@ -67,8 +67,8 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'Feedback',
-        to: '/feedback',
+        name: 'Broadcast',
+        to: '/broadcast',
       }
     ],
   },
