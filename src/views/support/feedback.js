@@ -12,7 +12,7 @@ const feedback = () => {
   }, []);
 
   const fetchMessage=async()=>{
-    const response = await axios.get(`http://54.244.180.151:3002/api/getFeedback`);
+    const response = await axios.get(`http://localhost:3002/api/getFeedback`);
     setMessage(response.data.data)
   };
  

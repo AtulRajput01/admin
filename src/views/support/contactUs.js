@@ -12,7 +12,7 @@ const contact = () => {
   }, []);
 
   const fetchMessage=async()=>{
-    const response = await axios.get(`http://54.244.180.151:3002/api/getContact`);
+    const response = await axios.get(`http://localhost:3002/api/getContact`);
     setMessage(response.data.data)
   };
  

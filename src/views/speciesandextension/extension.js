@@ -10,7 +10,7 @@ import {
   CModalHeader,
   CModalTitle,
   CModalBody,
-  CModalFooter,
+  CSpinner,
   CForm,
   CFormInput,
   CTable,
@@ -28,7 +28,8 @@ import {
 const Extension = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [extensions, setExtensions] = useState([]);
-  const [speciesOptions, setSpeciesOptions] = useState([]); // For species dropdown
+  const [speciesOptions, setSpeciesOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     extensionName: "",
     extensionDescription: "",
@@ -44,7 +45,7 @@ const Extension = () => {
     // Fetch extensions data when the component mounts
     const fetchExtensions = async () => {
       try {
-        const response = await axios.get("http://54.244.180.151:3002/api/Extension/getAll");
+        const response = await axios.get("http://localhost:3002/api/Extension/getAll");
         setExtensions(response.data.data);
       } catch (err) {
         setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
@@ -59,7 +60,7 @@ const Extension = () => {
     if (formVisible) {
       const fetchSpecies = async () => {
         try {
-          const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories/");
+          const response = await axios.get("http://localhost:3002/api/species/getSpeciesCategories/");
           setSpeciesOptions(response.data.data);
         } catch (err) {
           setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
@@ -78,6 +79,7 @@ const Extension = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append("extensionName", formData.extensionName);
     formDataToSend.append("extensionDescription", formData.description);
@@ -92,7 +94,7 @@ const Extension = () => {
     }
 
     try {
-      const response = await axios.post("http://54.244.180.151:3002/api/extension/addExtension", formDataToSend, {
+      const response = await axios.post("http://localhost:3002/api/extension/addExtension", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -102,6 +104,8 @@ const Extension = () => {
       resetFormData();
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while adding the extension.");
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -166,7 +170,7 @@ const Extension = () => {
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {extension.image && (
                         <img
-                          src={`http://54.244.180.151:3002/${extension.image}`} // Update this path according to your API
+                          src={`http://localhost:3002/${extension.image}`} // Update this path according to your API
                           alt={extension.extensionName}
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />
@@ -214,7 +218,7 @@ const Extension = () => {
             </CCol>
             <CCol md={6}>
               <CFormInput
-                type="text"
+                type="number"
                 id="price"
                 label="Price"
                 value={formData.price}
@@ -266,23 +270,12 @@ const Extension = () => {
               </CCol>
             )}
             <CCol xs={12}>
-              <CButton color="primary" type="submit">
-                Submit
+              <CButton color="primary" type="submit" disabled={loading}>
+                {loading ? <CSpinner size="sm" /> : 'Submit'}
               </CButton>
             </CCol>
           </CForm>
         </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={() => {
-              setFormVisible(false);
-              resetFormData();
-            }}
-          >
-            Close
-          </CButton>
-        </CModalFooter>
       </CModal>
     </>
   );
