@@ -39,7 +39,7 @@ const Species = () => {
     // Fetch species data when the component mounts
     const fetchSpecies = async () => {
       try {
-        const response = await axios.get("http://localhost:3002/api/species/getSpeciesCategories");
+        const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories");
         setSpecies(response.data.data); // Assuming the API response contains the species data
       } catch (err) {
         setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
@@ -62,7 +62,7 @@ const Species = () => {
     formDataToSend.append("image", formData.image);
 
     try {
-      const response = await axios.post("http://localhost:3002/api/species/SpeciesCategories", formDataToSend, {
+      const response = await axios.post("http://54.244.180.151:3002/api/species/SpeciesCategories", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -121,7 +121,7 @@ const Species = () => {
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {specie.image && (
                         <img
-                          src={`http://localhost:3002/${specie.image}`} // Update this path according to your API
+                          src={`http://54.244.180.151:3002/${specie.image}`} // Update this path according to your API
                           alt={specie.name}
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />

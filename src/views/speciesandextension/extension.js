@@ -45,7 +45,7 @@ const Extension = () => {
     // Fetch extensions data when the component mounts
     const fetchExtensions = async () => {
       try {
-        const response = await axios.get("http://localhost:3002/api/Extension/getAll");
+        const response = await axios.get("http://54.244.180.151:3002/api/Extension/getAll");
         setExtensions(response.data.data);
       } catch (err) {
         setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
@@ -60,7 +60,7 @@ const Extension = () => {
     if (formVisible) {
       const fetchSpecies = async () => {
         try {
-          const response = await axios.get("http://localhost:3002/api/species/getSpeciesCategories/");
+          const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories/");
           setSpeciesOptions(response.data.data);
         } catch (err) {
           setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
@@ -94,7 +94,7 @@ const Extension = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3002/api/extension/addExtension", formDataToSend, {
+      const response = await axios.post("http://54.244.180.151:3002/api/extension/addExtension", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -170,7 +170,7 @@ const Extension = () => {
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {extension.image && (
                         <img
-                          src={`http://localhost:3002/${extension.image}`} // Update this path according to your API
+                          src={`http://54.244.180.151:3002/${extension.image}`} // Update this path according to your API
                           alt={extension.extensionName}
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />
