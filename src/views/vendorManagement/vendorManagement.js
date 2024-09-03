@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import axios from "axios";
 import {
   CCard,
@@ -36,6 +36,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip, IconButton } from '@mui/material';
+import { FaTimes } from 'react-icons/fa';
+
+let debounceTimeout;
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -44,14 +47,18 @@ const UserManagement = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
-  const [selectUser,setSelectUser]=useState(null)
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const [selectUser, setSelectUser] = useState(null)
+  const [searchUser, setSearchUser] = useState('');
+  const searchUserRef = useRef(searchUser);
 
-  const fetchUsers = async () => {
+
+  useEffect(() => {
+    fetchUsers(selectUser,filter);
+  }, [selectUser,filter]);
+
+  const fetchUsers = async (selectUser,filter) => {
     try {
-      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor",{status:'ALL'});
+      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor", { status:filter,search:selectUser });
       setUsers(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -61,55 +68,53 @@ const UserManagement = () => {
     }
   };
 
-  // const handleDelete = async (id) => {
-  //   try {
-  //     await axios.delete(`http://54.244.180.151:3002/api/ShopDetails/deleteShop/${id}`);
-  //     const response = await axios.get(`http://54.244.180.151:3002/api/ShopDetails/${selectUser}`);
-  //     setSelectedVendor(response.data);
-  //   } catch (error) {
-  //     setError("Error deleting user");
-  //     console.error("Error deleting user:", error);
-  //   }
-  // };
+  const handleSearchUser = (e) => {
+    const value = e.target.value;
+    setSearchUser(value);
+    searchUserRef.current = value;
 
-  
-  const handleViewOrder = async(user) => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      fetchUsers(searchUserRef.current,filter);
+    }, 2000);
+  };
+
+  const handleClear = () => {
+    setSearchUser('');
+    fetchUsers(selectUser,filter);
+  };
+
+  const handleViewOrder = async (user) => {
     try {
       const response = await axios.get(`http://54.244.180.151:3002/api/ShopDetails/shop/${user._id}`);
       setSelectedVendor(response.data);
       setVisible(true);
       setSelectUser(user._id)
-  } catch (error) {
+    } catch (error) {
       setError('Error fetching species');
       console.error('Error fetching species:', error);
-  }
+    }
   };
 
-  // const handleChatOrder = (order) => {
-  //   setselectedVendor(order);
-  //   setChatVisible(true);
-  // };
-  const accepetVendor=async(id,status)=>{
-   const response=await axios.post('http://54.244.180.151:3002/api/vendor/approveVendor',{id,status})
-   fetchUsers();
-  }
-  const rejectVendor=async(id,status)=>{
-    const response=await axios.post('http://54.244.180.151:3002/api/vendor/approveVendor',{id,status})
-    fetchUsers();
-   }
  
-  const handleFilterChange = async(status) => {
+  const accepetVendor = async (id, status) => {
+    const response = await axios.post('http://54.244.180.151:3002/api/vendor/approveVendor', { id, status })
+    fetchUsers();
+  }
+  const rejectVendor = async (id, status) => {
+    const response = await axios.post('http://54.244.180.151:3002/api/vendor/approveVendor', { id, status })
+    fetchUsers();
+  }
+
+  const handleFilterChange = async (status) => {
     setFilter(status)
-    const response=await axios.post('http://54.244.180.151:3002/api/vendor/getVendor',{status});
-    setUsers(response.data.data);
-    setLoading(false);
   };
-  const verifyShop=async(id,status)=>{
-    const data={
+  const verifyShop = async (id, status) => {
+    const data = {
       id,
       status
     }
-    const res=await axios.post('http://54.244.180.151:3002/api/ShopDetails/verifyShop',data)
+    const res = await axios.post('http://54.244.180.151:3002/api/ShopDetails/verifyShop', data)
     const response = await axios.get(`http://54.244.180.151:3002/api/ShopDetails/shop/${selectUser}`);
     setSelectedVendor(response.data);
   }
@@ -122,18 +127,34 @@ const UserManagement = () => {
 
         <CCardHeader className="d-flex justify-content-between align-items-center">
           <h3>Manage Vendors</h3>
-
           <div className="d-flex" style={{ marginLeft: 'auto' }}>
-            {/* <CForm style={{ width: '12rem', marginRight: '1rem' }}>
+          <CForm className="d-flex align-items-center" style={{ width: '10rem', marginLeft: 'auto' }}>
+            <div style={{ position: 'relative', width: '100%' }}>
               <CFormInput
                 type="text"
                 placeholder="Search by Name"
+                value={searchUser}
+                onChange={handleSearchUser}
               />
-            </CForm> */}
-
+              {searchUser && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: '0.5rem',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer'
+                  }}
+                  onClick={handleClear}
+                >
+                  <FaTimes size={16} />
+                </div>
+              )}
+            </div>
+          </CForm>
             <CDropdown style={{ width: '12rem' }}>
               <CDropdownToggle color="secondary">
-              {filter === 'ALL' ? 'All' : filter}
+                {filter === 'ALL' ? 'All' : filter}
               </CDropdownToggle>
               <CDropdownMenu style={{ width: '12rem', textAlign: 'center' }}>
                 <CDropdownItem onClick={() => handleFilterChange('ALL')}>ALL</CDropdownItem>
@@ -178,7 +199,7 @@ const UserManagement = () => {
                       {user.contactNumber || "null"}
                     </CTableDataCell>
                     <CTableDataCell style={{ textAlign: "center" }}>
-                    {user.status === 'accepted' ? "Approved" : user.status === 'rejected' ? "rejected" : "Pending"}
+                      {user.status === 'accepted' ? "Approved" : user.status === 'rejected' ? "rejected" : "Pending"}
                     </CTableDataCell>
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {user.status !== 'accepted' && user.status !== 'rejected' ? (
@@ -204,91 +225,90 @@ const UserManagement = () => {
         </CCardBody>
       </CCard>
 
-<CModal visible={visible} onClose={() => setVisible(false)} size="xl">
-  <CModalHeader onClose={() => setVisible(false)}>
-    <CModalTitle>Vendor Details</CModalTitle>
-  </CModalHeader>
-  <CCard >
-  <CCardBody>
-  <CTable responsive striped hover bordered>
-    <CTableHead color="dark">
-      <CTableRow>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>S.No</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Shop Name</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Owner Name</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Owner Email</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Contact Number</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Available From</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Available To</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Subscription</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Address</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Shop Logo</CTableHeaderCell>
-        <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Action</CTableHeaderCell>
-      </CTableRow>
-    </CTableHead>
-    <CTableBody>
-      {loading ? (
-        <CTableRow>
-          <CTableDataCell colSpan="10" style={{ textAlign: "center" }}>Loading...</CTableDataCell>
-        </CTableRow>
-      ) :(
-        Array.isArray(selectedVendor) && selectedVendor.length > 0 ? (
-          selectedVendor.map((vendor, index) => (
-            <CTableRow key={vendor._id}>
-              <CTableHeaderCell scope="row" style={{ textAlign: "center" }}>{index + 1}</CTableHeaderCell>
-              <CTableDataCell style={{ textAlign: "center" }}>{vendor.shopName || "null"}</CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>{vendor.ownerName || "null"}</CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>{vendor.ownerEmail || "null"}</CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>{vendor.contactNumber || "null"}</CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableFrom ? `${vendor.availableFrom} ${vendor.availableFromPeriod}` : "null"}</CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableTo ? `${vendor.availableTo} ${vendor.availableToPeriod}` : "null"}</CTableDataCell>
-              {/* <CTableDataCell style={{ textAlign: "center" }}>{vendor.isSubscription || "null"}</CTableDataCell> */}
-              <CTableDataCell
-  style={{
-    textAlign: "center",
-    backgroundColor: vendor.isSubscription ? "lightgreen" : "white",
-    color: vendor.isSubscription ? "black" : "gray"  // Optional: change text color for better readability
-  }}
->
-  {vendor.isSubscription ? "Subscribed" : "Not Subscribed"}
-</CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>{vendor.address || "null"}</CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>
-                {vendor.shopLogo ? (
-                  <img src={`http://54.244.180.151:3002/${vendor.shopLogo}`} alt="Shop Logo" style={{ width: '50px', height: '50px' }} />
-                ) : "null"}
-              </CTableDataCell>
-              <CTableDataCell style={{ textAlign: "center" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {!vendor.shopVerifyByAdmin ? (
-                    <Tooltip title="Shop Verify" arrow>
-                      <IconButton className="me-1 p-1" onClick={() => verifyShop(vendor._id, true)}>
-                        <FontAwesomeIcon icon={faCheckCircle} style={{ color: "#0984e3" }} />
-                      </IconButton>
-                    </Tooltip>
+      <CModal visible={visible} onClose={() => setVisible(false)} size="xl">
+        <CModalHeader onClose={() => setVisible(false)}>
+          <CModalTitle>Vendor Details</CModalTitle>
+        </CModalHeader>
+        <CCard >
+          <CCardBody>
+            <CTable responsive striped hover bordered>
+              <CTableHead color="dark">
+                <CTableRow>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>S.No</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Shop Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Owner Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Owner Email</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Contact Number</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Available From</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Available To</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Subscription</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Address</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Shop Logo</CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>Action</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {loading ? (
+                  <CTableRow>
+                    <CTableDataCell colSpan="10" style={{ textAlign: "center" }}>Loading...</CTableDataCell>
+                  </CTableRow>
+                ) : (
+                  Array.isArray(selectedVendor) && selectedVendor.length > 0 ? (
+                    selectedVendor.map((vendor, index) => (
+                      <CTableRow key={vendor._id}>
+                        <CTableHeaderCell scope="row" style={{ textAlign: "center" }}>{index + 1}</CTableHeaderCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>{vendor.shopName || "null"}</CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>{vendor.ownerName || "null"}</CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>{vendor.ownerEmail || "null"}</CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>{vendor.contactNumber || "null"}</CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableFrom ? `${vendor.availableFrom} ${vendor.availableFromPeriod}` : "null"}</CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableTo ? `${vendor.availableTo} ${vendor.availableToPeriod}` : "null"}</CTableDataCell>
+                        <CTableDataCell
+                          style={{
+                            textAlign: "center",
+                            backgroundColor: vendor.isSubscription ? "lightgreen" : "white",
+                            color: vendor.isSubscription ? "black" : "gray"
+                          }}
+                        >
+                          {vendor.isSubscription ? "Subscribed" : "Not Subscribed"}
+                        </CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>{vendor.address || "null"}</CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>
+                          {vendor.shopLogo ? (
+                            <img src={`http://54.244.180.151:3002/${vendor.shopLogo}`} alt="Shop Logo" style={{ width: '50px', height: '50px' }} />
+                          ) : "null"}
+                        </CTableDataCell>
+                        <CTableDataCell style={{ textAlign: "center" }}>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {!vendor.shopVerifyByAdmin ? (
+                              <Tooltip title="Shop Verify" arrow>
+                                <IconButton className="me-1 p-1" onClick={() => verifyShop(vendor._id, true)}>
+                                  <FontAwesomeIcon icon={faCheckCircle} style={{ color: "#0984e3" }} />
+                                </IconButton>
+                              </Tooltip>
+                            ) : (
+                              <span style={{ color: "green", fontWeight: "bold" }}>Verified</span>
+                            )}
+                          </div>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))
                   ) : (
-                    <span style={{ color: "green", fontWeight: "bold" }}>Verified</span>
-                  )}
-                </div>
-              </CTableDataCell>
-            </CTableRow>
-          ))
-        ) : (
-          <CTableRow>
-            <CTableDataCell colSpan="10" style={{ textAlign: "center" }}>No data available</CTableDataCell>
-          </CTableRow>
-        )
-      )}
-    </CTableBody>
-  </CTable>
-  </CCardBody>
-  </CCard >
-  <CModalFooter>
-    <CButton color="secondary" onClick={() => setVisible(false)}>
-      Close
-    </CButton>
-  </CModalFooter>
-</CModal>
+                    <CTableRow>
+                      <CTableDataCell colSpan="10" style={{ textAlign: "center" }}>No data available</CTableDataCell>
+                    </CTableRow>
+                  )
+                )}
+              </CTableBody>
+            </CTable>
+          </CCardBody>
+        </CCard >
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setVisible(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
 
     </>
   );

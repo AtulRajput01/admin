@@ -10,7 +10,7 @@ import {
   CModalHeader,
   CModalTitle,
   CModalBody,
-  CModalFooter,
+  CSpinner,
   CForm,
   CFormInput,
   CTable,
@@ -28,7 +28,8 @@ import {
 const Extension = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [extensions, setExtensions] = useState([]);
-  const [speciesOptions, setSpeciesOptions] = useState([]); // For species dropdown
+  const [speciesOptions, setSpeciesOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     extensionName: "",
     extensionDescription: "",
@@ -78,6 +79,7 @@ const Extension = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append("extensionName", formData.extensionName);
     formDataToSend.append("extensionDescription", formData.description);
@@ -102,6 +104,8 @@ const Extension = () => {
       resetFormData();
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while adding the extension.");
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -214,7 +218,7 @@ const Extension = () => {
             </CCol>
             <CCol md={6}>
               <CFormInput
-                type="text"
+                type="number"
                 id="price"
                 label="Price"
                 value={formData.price}
@@ -266,23 +270,12 @@ const Extension = () => {
               </CCol>
             )}
             <CCol xs={12}>
-              <CButton color="primary" type="submit">
-                Submit
+              <CButton color="primary" type="submit" disabled={loading}>
+                {loading ? <CSpinner size="sm" /> : 'Submit'}
               </CButton>
             </CCol>
           </CForm>
         </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={() => {
-              setFormVisible(false);
-              resetFormData();
-            }}
-          >
-            Close
-          </CButton>
-        </CModalFooter>
       </CModal>
     </>
   );

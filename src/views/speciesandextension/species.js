@@ -19,7 +19,7 @@ import {
   CTableHeaderCell,
   CTableBody,
   CTableDataCell,
-  CAlert,
+  CSpinner ,
   CCol,
   CPagination,
   CPaginationItem,
@@ -28,6 +28,7 @@ import {
 const Species = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [species, setSpecies] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     image: null,
@@ -55,6 +56,7 @@ const Species = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("image", formData.image);
@@ -70,6 +72,8 @@ const Species = () => {
       resetFormData();
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while adding species.");
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -172,23 +176,12 @@ const Species = () => {
               />
             </CCol>
             <CCol xs={12}>
-              <CButton color="primary" type="submit">
-                Submit
+              <CButton color="primary" type="submit" disabled={loading}>
+                {loading ? <CSpinner size="sm" /> : 'Submit'}
               </CButton>
             </CCol>
           </CForm>
         </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={() => {
-              setFormVisible(false);
-              resetFormData();
-            }}
-          >
-            Close
-          </CButton>
-        </CModalFooter>
       </CModal>
     </>
   );
