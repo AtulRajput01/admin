@@ -53,12 +53,12 @@ const UserManagement = () => {
 
 
   useEffect(() => {
-    fetchUsers(selectUser,filter);
-  }, [selectUser,filter]);
+    fetchUsers();
+  }, []);
 
-  const fetchUsers = async (selectUser,filter) => {
+  const fetchUsers = async () => {
     try {
-      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor", { status:filter,search:selectUser });
+      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor", { status:filter,search:searchUser });
       setUsers(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -81,7 +81,8 @@ const UserManagement = () => {
 
   const handleClear = () => {
     setSearchUser('');
-    fetchUsers(selectUser,filter);
+    setFilter('All')
+    fetchUsers();
   };
 
   const handleViewOrder = async (user) => {

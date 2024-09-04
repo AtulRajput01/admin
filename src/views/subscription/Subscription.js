@@ -106,6 +106,7 @@ const SubscriptionPlansPage = () => {
     try {
       await axios.delete(`http://54.244.180.151:3002/api/subscription/${id}`);
       setPlans(plans.filter(plan => plan._id !== id));
+      handleAddPlan()
     } catch (error) {
       console.error('Failed to delete plan:', error.message);
     }
@@ -150,7 +151,7 @@ const SubscriptionPlansPage = () => {
                     <CTableHeaderCell>{plan.features.join(', ')}</CTableHeaderCell>
                     <CTableHeaderCell>{plan.status}</CTableHeaderCell>
                     <CTableHeaderCell>
-                      <CButton color="warning" onClick={() => handleEditPlan(plan)}>Edit</CButton>
+                      {/* <CButton color="warning" onClick={() => handleEditPlan(plan)}>Edit</CButton> */}
                       <CButton color="danger" onClick={() => handleDeletePlan(plan._id)}>Delete</CButton>
                     </CTableHeaderCell>
                   </CTableRow>
