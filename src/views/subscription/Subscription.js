@@ -150,7 +150,7 @@ const SubscriptionPlansPage = () => {
                     <CTableHeaderCell>{plan.features.join(', ')}</CTableHeaderCell>
                     <CTableHeaderCell>{plan.status}</CTableHeaderCell>
                     <CTableHeaderCell>
-                      <CButton color="warning" onClick={() => handleEditPlan(plan)}>Edit</CButton>
+                      {/* <CButton color="warning" onClick={() => handleEditPlan(plan)}>Edit</CButton> */}
                       <CButton color="danger" onClick={() => handleDeletePlan(plan._id)}>Delete</CButton>
                     </CTableHeaderCell>
                   </CTableRow>
