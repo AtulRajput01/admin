@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect,useCallback  } from "react";
 import axios from "axios";
 import {
   CCard,
@@ -38,8 +38,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip, IconButton } from '@mui/material';
 import { FaTimes } from 'react-icons/fa';
-
-let debounceTimeout;
+import { debounce } from 'lodash';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -47,19 +46,21 @@ const UserManagement = () => {
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('ALL');
-  const [selectUser, setSelectUser] = useState(null)
+  const [selectUser, setSelectUser] = useState(null);
   const [searchUser, setSearchUser] = useState('');
-  const searchUserRef = useRef(searchUser);
+  const [filter, setFilter] = useState('ALL');
 
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (searchUser,newFilter) => {
     try {
-      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor", { status:filter,search:searchUser });
+      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor", {
+        search:searchUser,
+        status: newFilter
+      });
       setUsers(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -70,22 +71,22 @@ const UserManagement = () => {
       setLoading(false);
     }
   };
+  const fetchUsersDebounced = useCallback(
+    debounce((searchTerm, filter) => {
+      fetchUsers(searchTerm, filter);
+    }, 300),
+    []
+  );
 
   const handleSearchUser = (e) => {
-    const value = e.target.value;
-    setSearchUser(value);
-    searchUserRef.current = value;
-
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-      fetchUsers(searchUserRef.current,filter);
-    }, 2000);
+    setSearchUser(e.target.value);
+    fetchUsersDebounced(e.target.value, filter);
   };
 
   const handleClear = () => {
     setSearchUser('');
-    setFilter('All')
-    fetchUsers();
+    setFilter('ALL');
+    fetchUsers('', 'ALL');
   };
 
   const handleViewOrder = async (user) => {
@@ -110,8 +111,9 @@ const UserManagement = () => {
     fetchUsers();
   }
 
-  const handleFilterChange = async (status) => {
-    setFilter(status)
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    fetchUsers(searchUser, newFilter);
   };
   const verifyShop = async (id, status) => {
     const data = {
@@ -127,7 +129,6 @@ const UserManagement = () => {
     <>
       {error && <CAlert color="danger">{error}</CAlert>}
       <CCard >
-
 
         <CCardHeader className="d-flex justify-content-between align-items-center">
           <h3>Manage Vendors</h3>
@@ -169,8 +170,6 @@ const UserManagement = () => {
             </CDropdown>
           </div>
         </CCardHeader>
-
-
 
         <CCardBody>
           <CCardText>

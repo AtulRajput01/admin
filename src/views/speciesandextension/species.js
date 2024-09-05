@@ -92,7 +92,7 @@ const Species = () => {
     }
 
     try {
-      await axios.put(`http://localhost:3002/api/species/speciescategory/${selectedSpecies._id}`, formDataToSend, {
+      await axios.put(`http://54.244.180.151:3002/api/species/speciescategory/${selectedSpecies._id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -164,7 +164,7 @@ const Species = () => {
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {specie.image && (
                         <img
-                          src={`http://localhost:3002/${specie.image}`} // Update this path according to your API
+                          src={`http://54.244.180.151:3002/${specie.image}`} // Update this path according to your API
                           alt={specie.name}
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />

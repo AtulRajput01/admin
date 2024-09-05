@@ -23,6 +23,7 @@ import {
   CPagination,
   CPaginationItem,
   CFormSelect,
+  CModalFooter 
 } from "@coreui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from '@fortawesome/free-solid-svg-icons';
@@ -39,7 +40,7 @@ const Extension = () => {
     image: '',
     price: ''
   });
-  const [speciesOptions, setSpeciesOptions] = useState([]); // For species dropdown
+  const [speciesOptions, setSpeciesOptions] = useState([]); 
   const [formData, setFormData] = useState({
     extensionName: "",
     extensionDescription: "",
@@ -47,12 +48,11 @@ const Extension = () => {
     price: "",
     species: "",
     role: "admin",
-    shopId: "", // Optional
+    shopId: "",
   });
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch extensions data when the component mounts
     fetchExtensions();
   }, []);
 
@@ -66,7 +66,6 @@ const Extension = () => {
   };
 
   useEffect(() => {
-    // Fetch species data when the form becomes visible
     if (formVisible) {
       const fetchSpecies = async () => {
         try {
@@ -120,18 +119,12 @@ const Extension = () => {
   };
 
   const handleEditClick = (item) => {
-    console.log("item", item);
-
     setSelectedItem(item);
-
     setEditedItem({
       name: item.extensionName,
       image: item.extensionImage,
       price: item.price,
     });
-
-    console.log("selectedItem after state set:", selectedItem);
-    console.log("editedItem after state set:", editedItem);
     setEditModalOpen(true);
   };
 
@@ -145,19 +138,16 @@ const Extension = () => {
     setImageFile(file);
   };
 
-  console.log("selectedItem", selectedItem);
-
-
   const handleEditSubmit = async () => {
     setLoading(true);
     const apiUrl = `http://54.244.180.151:3002/api/Extension/editeExten/${selectedItem._id}`;
 
     const formData = new FormData();
-    formData.append('extensionName', editedItem.name); // Ensure field names match your backend model
+    formData.append('extensionName', editedItem.name);
     formData.append('price', editedItem.price);
 
     if (imageFile) {
-      formData.append('extensionImage', imageFile); // Handle image update if needed
+      formData.append('extensionImage', imageFile); 
     }
 
     try {
