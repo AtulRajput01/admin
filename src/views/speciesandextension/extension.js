@@ -22,19 +22,31 @@ import {
   CCol,
   CPagination,
   CPaginationItem,
-  CFormSelect 
+  CFormSelect,
+  CSpinner
 } from "@coreui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 const Extension = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [extensions, setExtensions] = useState([]);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [editedItem, setEditedItem] = useState({
+    name: '',
+    image: '',
+    price: ''
+  });
   const [speciesOptions, setSpeciesOptions] = useState([]); // For species dropdown
   const [formData, setFormData] = useState({
     extensionName: "",
     extensionDescription: "",
     extensionImage: null,
     price: "",
-    species:"",
+    species: "",
     role: "admin",
     shopId: "", // Optional
   });
@@ -42,17 +54,17 @@ const Extension = () => {
 
   useEffect(() => {
     // Fetch extensions data when the component mounts
-    const fetchExtensions = async () => {
-      try {
-        const response = await axios.get("http://54.244.180.151:3002/api/Extension/getAll");
-        setExtensions(response.data.data);
-      } catch (err) {
-        setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
-      }
-    };
-
     fetchExtensions();
   }, []);
+
+  const fetchExtensions = async () => {
+    try {
+      const response = await axios.get("http://54.244.180.151:3002/api/Extension/getAll");
+      setExtensions(response.data.data);
+    } catch (err) {
+      setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
+    }
+  };
 
   useEffect(() => {
     // Fetch species data when the form becomes visible
@@ -85,7 +97,7 @@ const Extension = () => {
     formDataToSend.append("price", formData.price);
     formDataToSend.append("specie", formData.species);
     formDataToSend.append("role", formData.role);
-    
+
     // Append shopId only if the user is a vendor
     if (formData.role === "vendor") {
       formDataToSend.append("shopId", formData.shopId);
@@ -105,13 +117,79 @@ const Extension = () => {
     }
   };
 
+  const handleEditClick = (item) => {
+    console.log("item", item);
+
+    setSelectedItem(item);
+
+    setEditedItem({
+      name: item.extensionName,
+      image: item.extensionImage,
+      price: item.price,
+    });
+
+    console.log("selectedItem after state set:", selectedItem);
+    console.log("editedItem after state set:", editedItem);
+    setEditModalOpen(true);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditedItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+  };
+
+  console.log("selectedItem", selectedItem);
+
+
+  const handleEditSubmit = async () => {
+    setLoading(true);
+    const apiUrl = `http://54.244.180.151:3002/api/Extension/editeExten/${selectedItem._id}`;
+
+    const formData = new FormData();
+    formData.append('extensionName', editedItem.name); // Ensure field names match your backend model
+    formData.append('price', editedItem.price);
+
+    if (imageFile) {
+      formData.append('extensionImage', imageFile); // Handle image update if needed
+    }
+
+    try {
+      const response = await axios.put(apiUrl, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      if (response.status === 200) {
+        // Update the UI with the new data
+        setExtensions((prevExtensions) => {
+          return prevExtensions.map((ext) =>
+            ext._id === selectedItem._id ? { ...ext, ...editedItem, image: imageFile || ext.image } : ext
+          );
+        });
+        await fetchExtensions();
+        setEditModalOpen(false); // Close the modal after successful edit
+
+      }
+    } catch (err) {
+      setError(err.response ? err.response.data.message : "An error occurred while updating the extension.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
   const resetFormData = () => {
     setFormData({
       extensionName: "",
       extensionDescription: "",
       extensionImage: null,
       price: "",
-      species:"",
+      species: "",
       role: "admin",
       shopId: "", // Reset shopId as well
     });
@@ -135,7 +213,7 @@ const Extension = () => {
                     S.No
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
-                   Species
+                    Species
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
                     Name
@@ -145,6 +223,9 @@ const Extension = () => {
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
                     Image
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
+                    Action
                   </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -171,6 +252,14 @@ const Extension = () => {
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />
                       )}
+                    </CTableDataCell>
+                    <CTableDataCell style={{ textAlign: "center" }}>
+                      <button
+                        style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}
+                        onClick={() => handleEditClick(extension)}
+                      >
+                        <FontAwesomeIcon icon={faPen} style={{ fontSize: '15px', marginRight: '10px' }} />
+                      </button>
                     </CTableDataCell>
                   </CTableRow>
                 ))}
@@ -221,7 +310,7 @@ const Extension = () => {
                 onChange={handleChange}
               />
             </CCol>
-             <CCol md={6}>
+            <CCol md={6}>
               <CFormSelect
                 id="species"
                 label="Species"
@@ -266,8 +355,13 @@ const Extension = () => {
               </CCol>
             )}
             <CCol xs={12}>
-              <CButton color="primary" type="submit">
-                Submit
+              <CButton
+                type="submit"
+                color="primary"
+                className="px-4"
+                disabled={loading} // Disable button while loading
+              >
+                {loading ? <CSpinner size="sm" /> : 'Submit'} {/* Show loader in button */}
               </CButton>
             </CCol>
           </CForm>
@@ -281,6 +375,56 @@ const Extension = () => {
             }}
           >
             Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <CModal visible={editModalOpen} onClose={() => setEditModalOpen(false)}>
+        <CModalHeader onClose={() => setEditModalOpen(false)}>
+          <CModalTitle>Edit Item</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          {/* Conditionally render the Name field */}
+          {!selectedItem?.speciesName && (
+            <div>
+              <label>Name:</label>
+              <input
+                type="text"
+                name="name"
+                value={editedItem.name}
+                onChange={handleEditChange}
+                className="form-control"
+              />
+            </div>
+          )}
+          <div>
+            <label>Image:</label>
+            <input
+              type="file"
+              name="image"
+              onChange={handleImageChange}
+              className="form-control"
+            />
+          </div>
+          <div>
+            <label>Price:</label>
+            <input
+              type="text"
+              name="price"
+              value={editedItem.price}
+              onChange={handleEditChange}
+              className="form-control"
+            />
+          </div>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            onClick={handleEditSubmit}
+            color="primary"
+            className="px-4"
+            disabled={loading} // Disable button while loading
+          >
+            {loading ? <CSpinner size="sm" /> : 'Save Changes'} {/* Show loader in button */}
           </CButton>
         </CModalFooter>
       </CModal>

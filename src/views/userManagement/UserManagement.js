@@ -29,7 +29,8 @@ import {
   CCardBody,
   CCardText,
   CPagination,
-  CPaginationItem
+  CPaginationItem,
+  CSpinner
 } from "@coreui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPen, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -38,6 +39,7 @@ const UserManagement = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -54,6 +56,7 @@ const UserManagement = () => {
   }, []);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("http://54.244.180.151:3002/api/vendor/getUser");
       // console.log(response.data.data)
@@ -62,6 +65,8 @@ const UserManagement = () => {
     } catch (error) {
       setError("Error fetching users");
       console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -291,8 +296,13 @@ const UserManagement = () => {
               />
             </CCol>
             <CCol xs={12}>
-              <CButton color="primary" type="submit">
-                Submit
+              <CButton
+                type="submit"
+                style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', color: 'white' }}
+                className="px-4"
+                disabled={loading} // Disable button while loading
+              >
+                {loading ? <CSpinner size="sm" /> : 'Submit'} {/* Show loader in button */}
               </CButton>
             </CCol>
           </CForm>

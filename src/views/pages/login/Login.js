@@ -13,7 +13,8 @@ import {
   CFormInput,
   CInputGroup,
   CInputGroupText,
-  CRow
+  CRow,
+  CSpinner // Import CSpinner for the loader
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilUser } from '@coreui/icons';
@@ -27,10 +28,12 @@ const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // State to track loading
   const navigate = useNavigate(); // Hook to navigate programmatically
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show loader when request starts
     try {
       const response = await axios.post(API_URL, { email, password });
       if (response.status === 200) {
@@ -48,7 +51,12 @@ const AdminLogin = () => {
         setError('Failed to login. Please check your credentials.');
       }
       console.error('Admin Login Error:', error);
+    } finally {
+      setLoading(false); // Hide loader when request is complete
     }
+
+    
+
   };
   
 
@@ -96,8 +104,13 @@ const AdminLogin = () => {
                     </CInputGroup>
                     <CCol>
                       <CCol>
-                        <CButton type="submit" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', color: 'white'}}  className="px-4">
-                          Login
+                      <CButton
+                          type="submit"
+                          style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', color: 'white' }}
+                          className="px-4"
+                          disabled={loading} // Disable button while loading
+                        >
+                          {loading ? <CSpinner size="sm" /> : 'Login'} {/* Show loader in button */}
                         </CButton>
                       </CCol>
                       {/* <CCol className="text-right">
