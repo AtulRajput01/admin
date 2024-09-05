@@ -59,6 +59,7 @@ const Species = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("image", formData.image);
@@ -239,17 +240,6 @@ const Species = () => {
             </CCol>
           </CForm>
         </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={() => {
-              setFormVisible(false);
-              resetFormData();
-            }}
-          >
-            Close
-          </CButton>
-        </CModalFooter>
       </CModal>
 
       {/* Edit Species Modal */}

@@ -10,7 +10,7 @@ import {
   CModalHeader,
   CModalTitle,
   CModalBody,
-  CModalFooter,
+  CSpinner,
   CForm,
   CFormInput,
   CTable,
@@ -23,7 +23,6 @@ import {
   CPagination,
   CPaginationItem,
   CFormSelect,
-  CSpinner
 } from "@coreui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from '@fortawesome/free-solid-svg-icons';
@@ -90,6 +89,7 @@ const Extension = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append("extensionName", formData.extensionName);
     formDataToSend.append("extensionDescription", formData.description);
@@ -114,6 +114,8 @@ const Extension = () => {
       resetFormData();
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while adding the extension.");
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -303,7 +305,7 @@ const Extension = () => {
             </CCol>
             <CCol md={6}>
               <CFormInput
-                type="text"
+                type="number"
                 id="price"
                 label="Price"
                 value={formData.price}
@@ -366,17 +368,6 @@ const Extension = () => {
             </CCol>
           </CForm>
         </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={() => {
-              setFormVisible(false);
-              resetFormData();
-            }}
-          >
-            Close
-          </CButton>
-        </CModalFooter>
       </CModal>
 
       <CModal visible={editModalOpen} onClose={() => setEditModalOpen(false)}>

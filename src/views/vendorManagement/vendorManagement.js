@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import axios from "axios";
 import {
   CCard,
@@ -37,6 +37,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip, IconButton } from '@mui/material';
+import { FaTimes } from 'react-icons/fa';
+
+let debounceTimeout;
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -46,14 +49,17 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
   const [selectUser, setSelectUser] = useState(null)
+  const [searchUser, setSearchUser] = useState('');
+  const searchUserRef = useRef(searchUser);
+
+
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers(selectUser,filter);
+  }, [selectUser,filter]);
 
-  const fetchUsers = async () => {
-
+  const fetchUsers = async (selectUser,filter) => {
     try {
-      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor", { status: 'ALL' });
+      const response = await axios.post("http://54.244.180.151:3002/api/vendor/getVendor", { status:filter,search:selectUser });
       setUsers(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -65,17 +71,21 @@ const UserManagement = () => {
     }
   };
 
-  // const handleDelete = async (id) => {
-  //   try {
-  //     await axios.delete(`http://54.244.180.151:3002/api/ShopDetails/deleteShop/${id}`);
-  //     const response = await axios.get(`http://54.244.180.151:3002/api/ShopDetails/${selectUser}`);
-  //     setSelectedVendor(response.data);
-  //   } catch (error) {
-  //     setError("Error deleting user");
-  //     console.error("Error deleting user:", error);
-  //   }
-  // };
+  const handleSearchUser = (e) => {
+    const value = e.target.value;
+    setSearchUser(value);
+    searchUserRef.current = value;
 
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      fetchUsers(searchUserRef.current,filter);
+    }, 2000);
+  };
+
+  const handleClear = () => {
+    setSearchUser('');
+    fetchUsers(selectUser,filter);
+  };
 
   const handleViewOrder = async (user) => {
     try {
@@ -89,10 +99,7 @@ const UserManagement = () => {
     }
   };
 
-  // const handleChatOrder = (order) => {
-  //   setselectedVendor(order);
-  //   setChatVisible(true);
-  // };
+ 
   const accepetVendor = async (id, status) => {
     const response = await axios.post('http://54.244.180.151:3002/api/vendor/approveVendor', { id, status })
     fetchUsers();
@@ -104,9 +111,6 @@ const UserManagement = () => {
 
   const handleFilterChange = async (status) => {
     setFilter(status)
-    const response = await axios.post('http://54.244.180.151:3002/api/vendor/getVendor', { status });
-    setUsers(response.data.data);
-    setLoading(false);
   };
   const verifyShop = async (id, status) => {
     const data = {
@@ -126,15 +130,31 @@ const UserManagement = () => {
 
         <CCardHeader className="d-flex justify-content-between align-items-center">
           <h3>Manage Vendors</h3>
-
           <div className="d-flex" style={{ marginLeft: 'auto' }}>
-            {/* <CForm style={{ width: '12rem', marginRight: '1rem' }}>
+          <CForm className="d-flex align-items-center" style={{ width: '10rem', marginLeft: 'auto' }}>
+            <div style={{ position: 'relative', width: '100%' }}>
               <CFormInput
                 type="text"
                 placeholder="Search by Name"
+                value={searchUser}
+                onChange={handleSearchUser}
               />
-            </CForm> */}
-
+              {searchUser && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: '0.5rem',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer'
+                  }}
+                  onClick={handleClear}
+                >
+                  <FaTimes size={16} />
+                </div>
+              )}
+            </div>
+          </CForm>
             <CDropdown style={{ width: '12rem' }}>
               <CDropdownToggle color="secondary">
                 {filter === 'ALL' ? 'All' : filter}
@@ -246,12 +266,11 @@ const UserManagement = () => {
                         <CTableDataCell style={{ textAlign: "center" }}>{vendor.contactNumber || "null"}</CTableDataCell>
                         <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableFrom ? `${vendor.availableFrom} ${vendor.availableFromPeriod}` : "null"}</CTableDataCell>
                         <CTableDataCell style={{ textAlign: "center" }}>{vendor.availableTo ? `${vendor.availableTo} ${vendor.availableToPeriod}` : "null"}</CTableDataCell>
-                        {/* <CTableDataCell style={{ textAlign: "center" }}>{vendor.isSubscription || "null"}</CTableDataCell> */}
                         <CTableDataCell
                           style={{
                             textAlign: "center",
                             backgroundColor: vendor.isSubscription ? "lightgreen" : "white",
-                            color: vendor.isSubscription ? "black" : "gray"  // Optional: change text color for better readability
+                            color: vendor.isSubscription ? "black" : "gray"
                           }}
                         >
                           {vendor.isSubscription ? "Subscribed" : "Not Subscribed"}
