@@ -19,15 +19,19 @@ import {
   CTableHeaderCell,
   CTableBody,
   CTableDataCell,
-  CSpinner ,
   CCol,
   CPagination,
   CPaginationItem,
+  CSpinner,
 } from "@coreui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 const Species = () => {
   const [formVisible, setFormVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [species, setSpecies] = useState([]);
+  const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -35,18 +39,17 @@ const Species = () => {
   });
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Fetch species data when the component mounts
-    const fetchSpecies = async () => {
-      try {
-        const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories");
-        setSpecies(response.data.data); // Assuming the API response contains the species data
-      } catch (err) {
-        setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
-      }
-    };
+  const fetchSpecies = async () => {
+    try {
+      const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories");
+      setSpecies(response.data.data); // Assuming the API response contains the species data
+    } catch (err) {
+      setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
+    }
+  };
 
-    fetchSpecies();
+  useEffect(() => {
+    fetchSpecies(); // Fetch species data when the component mounts
   }, []);
 
   const handleChange = (e) => {
@@ -60,21 +63,57 @@ const Species = () => {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("image", formData.image);
+    setLoading(true);
+
 
     try {
-      const response = await axios.post("http://54.244.180.151:3002/api/species/SpeciesCategories", formDataToSend, {
+      await axios.post("http://54.244.180.151:3002/api/species/SpeciesCategories", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setSpecies([...species, response.data]);
       setFormVisible(false);
       resetFormData();
+      fetchSpecies(); // Refresh the species list after adding
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while adding species.");
-    }finally {
+    }finally{
       setLoading(false);
     }
+  };
+
+  const handleEditSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    if (formData.image) {
+      formDataToSend.append("image", formData.image);
+    }
+
+    try {
+      await axios.put(`http://localhost:3002/api/species/speciescategory/${selectedSpecies._id}`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setEditModalVisible(false);
+      resetFormData();
+      fetchSpecies(); // Refresh the species list after editing
+    } catch (err) {
+      setError(err.response ? err.response.data.message : "An error occurred while editing species.");
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  const handleEditClick = (specie) => {
+    setSelectedSpecies(specie);
+    setFormData({
+      name: specie.name || "",
+      image: null,
+    });
+    setEditModalVisible(true);
   };
 
   const resetFormData = () => {
@@ -82,6 +121,7 @@ const Species = () => {
       name: "",
       image: null,
     });
+    setSelectedSpecies(null);
   };
 
   return (
@@ -107,6 +147,9 @@ const Species = () => {
                   <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
                     Image
                   </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ textAlign: "center" }}>
+                    Action
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -121,11 +164,19 @@ const Species = () => {
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {specie.image && (
                         <img
-                          src={`http://54.244.180.151:3002/${specie.image}`} // Update this path according to your API
+                          src={`http://localhost:3002/${specie.image}`} // Update this path according to your API
                           alt={specie.name}
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />
                       )}
+                    </CTableDataCell>
+                    <CTableDataCell style={{ textAlign: "center" }}>
+                      <button
+                        style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}
+                        onClick={() => handleEditClick(specie)}
+                      >
+                        <FontAwesomeIcon icon={faPen} style={{ fontSize: '15px', marginRight: '10px' }} />
+                      </button>
                     </CTableDataCell>
                   </CTableRow>
                 ))}
@@ -146,6 +197,7 @@ const Species = () => {
         </CCardBody>
       </CCard>
 
+      {/* Add Species Modal */}
       <CModal
         visible={formVisible}
         onClose={() => {
@@ -176,12 +228,73 @@ const Species = () => {
               />
             </CCol>
             <CCol xs={12}>
-              <CButton color="primary" type="submit" disabled={loading}>
-                {loading ? <CSpinner size="sm" /> : 'Submit'}
+            <CButton
+                type="submit"
+                color="primary"
+                className="px-4"
+                disabled={loading} // Disable button while loading
+              >
+                {loading ? <CSpinner size="sm" /> : 'Submit'} {/* Show loader in button */}
               </CButton>
+              
             </CCol>
           </CForm>
         </CModalBody>
+      </CModal>
+
+      {/* Edit Species Modal */}
+      <CModal
+        visible={editModalVisible}
+        onClose={() => {
+          setEditModalVisible(false);
+          resetFormData();
+        }}
+      >
+        <CModalHeader closeButton>
+          <CModalTitle>Edit Species</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm className="row g-3" onSubmit={handleEditSubmit}>
+            <CCol md={6}>
+              <CFormInput
+                type="text"
+                id="name"
+                label="Name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </CCol>
+            <CCol md={6}>
+              <CFormInput
+                type="file"
+                id="image"
+                label="Image"
+                onChange={handleChange}
+              />
+            </CCol>
+            <CCol xs={12}>
+              <CButton
+            type="submit"
+            color="primary"
+            className="px-4"
+            disabled={loading} // Disable button while loading
+          >
+            {loading ? <CSpinner size="sm" /> : 'Update'} {/* Show loader in button */}
+          </CButton>
+            </CCol>
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={() => {
+              setEditModalVisible(false);
+              resetFormData();
+            }}
+          >
+            Close
+          </CButton>
+        </CModalFooter>
       </CModal>
     </>
   );

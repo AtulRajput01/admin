@@ -32,6 +32,7 @@ import {
   CPaginationItem,
   CFormLabel,
   CFormSelect,
+  CSpinner
 } from "@coreui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -64,6 +65,8 @@ const UserManagement = () => {
     } catch (error) {
       setError("Error fetching users");
       console.error("Error fetching users:", error);
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
@@ -184,7 +187,7 @@ const UserManagement = () => {
               <CTableBody>
                 {loading ? (
                   <CTableRow>
-                    <CTableDataCell colSpan="7">Loading...</CTableDataCell>
+                    <CSpinner color="primary" />
                   </CTableRow>
                 ) : (users.map((user, index) => (
                   <CTableRow key={user._id}>
