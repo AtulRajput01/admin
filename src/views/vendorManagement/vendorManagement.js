@@ -8,7 +8,6 @@ import {
   CButton,
   CListGroup,
   CListGroupItem,
-  CModal,
   CModalHeader,
   CModalTitle,
   CModalFooter,
