@@ -53,7 +53,6 @@ const Broadcast = () => {
         throw new Error('Failed to send notification');
       }
       const result = await response.json();
-      console.log('Notification sent successfully:', result);
       setNotifications([result, ...notifications]);
       setNewNotification({ title: '', body: '', role: '' });
     } catch (error) {
