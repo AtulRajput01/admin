@@ -10,7 +10,8 @@ import {
   CFormInput,
   CFormTextarea,
   CContainer,
-  CFormSelect
+  CFormSelect,
+  CSpinner // Import the spinner component for the loader
 } from '@coreui/react';
 
 const Broadcast = () => {
@@ -20,10 +21,10 @@ const Broadcast = () => {
     body: '',
     role: '',
   });
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleNewNotificationChange = (e) => {
     const { name, value } = e.target;
-    // Map the dropdown value to the desired value
     let mappedValue = value;
     if (name === "role") {
       mappedValue = value === "Users" ? "user" : "vendor";
@@ -35,6 +36,7 @@ const Broadcast = () => {
   };
 
   const handleSendNotification = async () => {
+    setLoading(true); // Set loading to true when starting the request
     const newNotif = {
       ...newNotification,
       timestamp: new Date().toLocaleString(),
@@ -57,6 +59,8 @@ const Broadcast = () => {
       setNewNotification({ title: '', body: '', role: '' });
     } catch (error) {
       console.error('Error sending notification:', error);
+    } finally {
+      setLoading(false); // Set loading to false after the request is complete
     }
   };
 
@@ -103,8 +107,12 @@ const Broadcast = () => {
                   </CCol>
                 </div>
 
-                <CButton color="primary" onClick={handleSendNotification}>
-                  Send Notification
+                <CButton 
+                  color="primary" 
+                  onClick={handleSendNotification} 
+                  disabled={loading} // Disable the button while loading
+                >
+                  {loading ? <CSpinner size="sm" /> : 'Send Notification'}
                 </CButton>
               </CForm>
             </CCardBody>
