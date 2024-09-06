@@ -23,11 +23,10 @@ const Broadcast = () => {
 
   const handleNewNotificationChange = (e) => {
     const { name, value } = e.target;
+    // Map the dropdown value to the desired value
     let mappedValue = value;
-    if (value === "Users") {
-      mappedValue = "user";
-    } else if (value === "Vendors") {
-      mappedValue = "vendor"; 
+    if (name === "role") {
+      mappedValue = value === "Users" ? "user" : "vendor";
     }
     setNewNotification((prevState) => ({
       ...prevState,
@@ -94,16 +93,13 @@ const Broadcast = () => {
                     <CFormSelect
                       id="role"
                       name="role"
-                      value={newNotification.role}
+                      value={newNotification.role === 'user' ? 'Users' : 'Vendors'}
                       onChange={handleNewNotificationChange}
                       required
                     >
                       <option value="">Select Role</option>
-                      {["Vendors", "Users"].map((role, index) => (
-                        <option key={index} value={role}>
-                          {role}
-                        </option>
-                      ))}
+                      <option value="Users">Users</option>
+                      <option value="Vendors">Vendors</option>
                     </CFormSelect>
                   </CCol>
                 </div>
