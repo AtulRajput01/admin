@@ -13,49 +13,53 @@ import {
   CFormSelect
 } from '@coreui/react';
 
-const initialNotifications = [
-  {
-    id: 1,
-    title: 'New Order Received',
-    message: 'You have received a new order from John Doe.',
-    timestamp: '2024-07-03 10:00 AM',
-    role: 'Vendor',
-  },
-  {
-    id: 2,
-    title: 'Processing Started',
-    message: 'Processing of Order #1234 has started.',
-    timestamp: '2024-07-03 11:00 AM',
-    role: 'Admin',
-  },
-];
-
 const Broadcast = () => {
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState({
     title: '',
-    message: '',
-    role: '', // Changed from 'stage' to 'role'
+    body: '',
+    role: '',
   });
-
-  const handleDelete = (id) => {
-    const updatedNotifications = notifications.filter(notification => notification.id !== id);
-    setNotifications(updatedNotifications);
-  };
 
   const handleNewNotificationChange = (e) => {
     const { name, value } = e.target;
-    setNewNotification({ ...newNotification, [name]: value });
+    let mappedValue = value;
+    if (value === "Users") {
+      mappedValue = "user";
+    } else if (value === "Vendors") {
+      mappedValue = "vendor"; 
+    }
+    setNewNotification((prevState) => ({
+      ...prevState,
+      [name]: mappedValue,
+    }));
   };
 
-  const handleSendNotification = () => {
+  const handleSendNotification = async () => {
     const newNotif = {
-      id: notifications.length + 1,
       ...newNotification,
       timestamp: new Date().toLocaleString(),
     };
-    setNotifications([newNotif, ...notifications]);
-    setNewNotification({ title: '', message: '', role: '' }); // Reset the form
+
+    try {
+      const response = await fetch('http://54.244.180.151:3002/api/admin/sendN', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newNotif),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send notification');
+      }
+      const result = await response.json();
+      console.log('Notification sent successfully:', result);
+      setNotifications([result, ...notifications]);
+      setNewNotification({ title: '', body: '', role: '' });
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
   };
 
   return (
@@ -80,8 +84,8 @@ const Broadcast = () => {
                   <CFormLabel htmlFor="message">Message</CFormLabel>
                   <CFormTextarea
                     id="message"
-                    name="message"
-                    value={newNotification.message}
+                    name="body"
+                    value={newNotification.body}
                     onChange={handleNewNotificationChange}
                   />
                 </div>
@@ -89,13 +93,13 @@ const Broadcast = () => {
                   <CCol>
                     <CFormSelect
                       id="role"
-                      name="role" // Changed from 'stage' to 'role'
+                      name="role"
                       value={newNotification.role}
                       onChange={handleNewNotificationChange}
                       required
                     >
                       <option value="">Select Role</option>
-                      {["Vendor", "Admin"].map((role, index) => (
+                      {["Vendors", "Users"].map((role, index) => (
                         <option key={index} value={role}>
                           {role}
                         </option>

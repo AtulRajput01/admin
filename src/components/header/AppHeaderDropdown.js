@@ -18,7 +18,7 @@ import CIcon from '@coreui/icons-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import avatar8 from './../../assets/images/avatars/8.jpg';
+import avatar8 from './../../../public/logo/tlogo.png';
 
 const API_URL = 'http://54.244.180.151:3002/';
 
@@ -61,23 +61,7 @@ const AppHeaderDropdown = () => {
         <CAvatar src={avatar8} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem href="#">
-          <CIcon icon={cilUser} className="me-2" />
-          Profile
-        </CDropdownItem>
-        {/* <CDropdownItem  onClick={subscription} role="button" style={{ cursor: 'pointer' }}>
-        <CIcon icon={cilStar} className="me-2" />
-          Subscription Plan
-        </CDropdownItem>
-        <CDropdownItem  onClick={payments} role="button" style={{ cursor: 'pointer' }}>
-          <CIcon icon={cilCreditCard} className="me-2" />
-          Payments
-          <CBadge color="secondary" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem> */}
-        <CDropdownDivider />
-        <CDropdownItem onClick={handleLogout} role="button" style={{ cursor: 'pointer' }}>
+      <CDropdownItem onClick={handleLogout} role="button" style={{ cursor: 'pointer' }}>
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout
         </CDropdownItem>
