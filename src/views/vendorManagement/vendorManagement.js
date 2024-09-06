@@ -28,6 +28,7 @@ import {
   CAlert,
   CCardBody,
   CCardText,
+  CModal,
   CPagination,
   CPaginationItem,
   CFormLabel,
