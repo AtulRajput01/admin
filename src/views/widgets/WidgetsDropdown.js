@@ -119,7 +119,7 @@ const WidgetsDropdown = (props) => {
               {data.vendor}
             </>
           }
-          title="Vendor"
+          title="Vendors"
           // action={
           //   <CDropdown alignment="end">
           //     <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
