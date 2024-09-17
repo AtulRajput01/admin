@@ -110,7 +110,7 @@ const Broadcast = () => {
                 <CButton 
                   color="primary" 
                   onClick={handleSendNotification} 
-                  disabled={loading} // Disable the button while loading
+                  disabled={loading}
                 >
                   {loading ? <CSpinner size="sm" /> : 'Send Notification'}
                 </CButton>

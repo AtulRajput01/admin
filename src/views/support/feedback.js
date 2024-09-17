@@ -19,7 +19,7 @@ const feedback = () => {
 
   return (
     <div>
-      <h3>Contact Us / Feedbacks</h3>
+      <h3>Feedbacks</h3>
 
       <div className="tables-container" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
         <div className="table" style={{ flex: '1', marginRight: '10px' }}>

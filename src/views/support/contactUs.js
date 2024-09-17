@@ -43,7 +43,7 @@ const Contact = () => {
   return (
     <div>
       <CCardHeader className="d-flex justify-content-between align-items-center">
-          <h3>Contact Us / Feedbacks</h3>
+          <h3>Contact Us</h3>
           <CDropdown style={{ width: '12rem' }}>
               <CDropdownToggle color="secondary">
               {filter === false ? 'Unread' : 'Read'}
