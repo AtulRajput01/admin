@@ -41,7 +41,7 @@ const Species = () => {
 
   const fetchSpecies = async () => {
     try {
-      const response = await axios.get("https://www.taxiadmin.hunt30.com/api/species/getSpeciesCategories");
+      const response = await axios.get("www.taxidermyadmin.hunt30.com/api/species/getSpeciesCategories");
       setSpecies(response.data.data); // Assuming the API response contains the species data
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
@@ -67,7 +67,7 @@ const Species = () => {
 
 
     try {
-      await axios.post("https://www.taxiadmin.hunt30.com/api/species/SpeciesCategories", formDataToSend, {
+      await axios.post("www.taxidermyadmin.hunt30.com/api/species/SpeciesCategories", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -92,7 +92,7 @@ const Species = () => {
     }
 
     try {
-      await axios.put(`https://www.taxiadmin.hunt30.com/api/species/speciescategory/${selectedSpecies._id}`, formDataToSend, {
+      await axios.put(`www.taxidermyadmin.hunt30.com/api/species/speciescategory/${selectedSpecies._id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

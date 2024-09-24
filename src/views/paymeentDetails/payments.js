@@ -12,7 +12,7 @@ const PaymentList = () => {
     // Fetch payments data from API
     const fetchPayments = async () => {
       try {
-        const response = await fetch('https://www.taxiadmin.hunt30.com/api/payments');
+        const response = await fetch('www.taxidermyadmin.hunt30.com/api/payments');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

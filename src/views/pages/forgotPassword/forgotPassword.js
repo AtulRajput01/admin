@@ -28,7 +28,7 @@ const Login = () => {
 
 //   const handleLogin = async () => {
 //     try {
-//       const response = await axios.post('https://www.taxiadmin.hunt30.com/api/auths/login', {
+//       const response = await axios.post('www.taxidermyadmin.hunt30.com/api/auths/login', {
 //         email,
 //         password,
 //       });

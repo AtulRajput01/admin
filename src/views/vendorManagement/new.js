@@ -44,7 +44,7 @@ const OrderDetails = () => {
 
   const fetchOrderDetails = async () => {
     try {
-      const response = await axios.get('https://www.taxiadmin.hunt30.com/api/OrderDetails/');
+      const response = await axios.get('www.taxidermyadmin.hunt30.com/api/OrderDetails/');
       setOrderDetails(response.data);
       setLoading(false);
     } catch (error) {
@@ -74,7 +74,7 @@ const OrderDetails = () => {
 
   const handleUpdateStatus = async () => {
     try {
-      const response = await axios.put(`https://www.taxiadmin.hunt30.com/api/OrderDetails/${selectedOrder._id}`, { status: newStatus });
+      const response = await axios.put(`www.taxidermyadmin.hunt30.com/api/OrderDetails/${selectedOrder._id}`, { status: newStatus });
       setSelectedOrder({ ...selectedOrder, status: newStatus });
       setOrderDetails((prevDetails) =>
         prevDetails.map((order) =>
