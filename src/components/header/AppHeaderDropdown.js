@@ -20,7 +20,7 @@ import axios from 'axios';
 
 import avatar8 from './../../../public/logo/tlogo.png';
 
-const API_URL = 'http://54.244.180.151:3002/';
+const API_URL = 'http://www.taxidermyadmin.hunt30.com/';
 
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();

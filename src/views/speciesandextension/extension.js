@@ -58,7 +58,7 @@ const Extension = () => {
 
   const fetchExtensions = async () => {
     try {
-      const response = await axios.get("http://54.244.180.151:3002/api/Extension/getAll");
+      const response = await axios.get("http://www.taxidermyadmin.hunt30.com/api/Extension/getAll");
       setExtensions(response.data.data);
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
@@ -69,7 +69,7 @@ const Extension = () => {
     if (formVisible) {
       const fetchSpecies = async () => {
         try {
-          const response = await axios.get("http://54.244.180.151:3002/api/species/getSpeciesCategories/");
+          const response = await axios.get("http://www.taxidermyadmin.hunt30.com/api/species/getSpeciesCategories/");
           setSpeciesOptions(response.data.data);
         } catch (err) {
           setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
@@ -103,7 +103,7 @@ const Extension = () => {
     }
 
     try {
-      const response = await axios.post("http://54.244.180.151:3002/api/extension/addExtension", formDataToSend, {
+      const response = await axios.post("http://www.taxidermyadmin.hunt30.com/api/extension/addExtension", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -140,7 +140,7 @@ const Extension = () => {
 
   const handleEditSubmit = async () => {
     setLoading(true);
-    const apiUrl = `http://54.244.180.151:3002/api/Extension/editeExten/${selectedItem._id}`;
+    const apiUrl = `http://www.taxidermyadmin.hunt30.com/api/Extension/editeExten/${selectedItem._id}`;
 
     const formData = new FormData();
     formData.append('extensionName', editedItem.name);
@@ -239,7 +239,7 @@ const Extension = () => {
                     <CTableDataCell style={{ textAlign: "center" }}>
                       {extension.image && (
                         <img
-                          src={`http://54.244.180.151:3002/${extension.image}`} // Update this path according to your API
+                          src={`http://www.taxidermyadmin.hunt30.com/${extension.image}`} // Update this path according to your API
                           alt={extension.extensionName}
                           style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />
