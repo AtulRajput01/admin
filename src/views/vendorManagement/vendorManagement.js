@@ -57,7 +57,7 @@ const UserManagement = () => {
 
   const fetchUsers = async (searchUser,newFilter) => {
     try {
-      const response = await axios.post("https://www.taxidermyadmin.hunt30.com/api/vendor/getVendor", {
+      const response = await axios.post("https://www.taxiadmin.hunt30.com/api/vendor/getVendor", {
         search:searchUser,
         status: newFilter
       });
@@ -91,7 +91,7 @@ const UserManagement = () => {
 
   const handleViewOrder = async (user) => {
     try {
-      const response = await axios.get(`https://www.taxidermyadmin.hunt30.com/api/ShopDetails/shop/${user._id}`);
+      const response = await axios.get(`https://www.taxiadmin.hunt30.com/api/ShopDetails/shop/${user._id}`);
       setSelectedVendor(response.data);
       setVisible(true);
       setSelectUser(user._id)
@@ -103,11 +103,11 @@ const UserManagement = () => {
 
  
   const accepetVendor = async (id, status) => {
-    const response = await axios.post('https://www.taxidermyadmin.hunt30.com/api/vendor/approveVendor', { id, status })
+    const response = await axios.post('https://www.taxiadmin.hunt30.com/api/vendor/approveVendor', { id, status })
     fetchUsers();
   }
   const rejectVendor = async (id, status) => {
-    const response = await axios.post('https://www.taxidermyadmin.hunt30.com/api/vendor/approveVendor', { id, status })
+    const response = await axios.post('https://www.taxiadmin.hunt30.com/api/vendor/approveVendor', { id, status })
     fetchUsers();
   }
 
@@ -120,8 +120,8 @@ const UserManagement = () => {
       id,
       status
     }
-    const res = await axios.post('https://www.taxidermyadmin.hunt30.com/api/ShopDetails/verifyShop', data)
-    const response = await axios.get(`https://www.taxidermyadmin.hunt30.com/api/ShopDetails/shop/${selectUser}`);
+    const res = await axios.post('https://www.taxiadmin.hunt30.com/api/ShopDetails/verifyShop', data)
+    const response = await axios.get(`https://www.taxiadmin.hunt30.com/api/ShopDetails/shop/${selectUser}`);
     setSelectedVendor(response.data);
   }
 

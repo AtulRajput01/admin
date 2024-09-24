@@ -58,7 +58,7 @@ const Extension = () => {
 
   const fetchExtensions = async () => {
     try {
-      const response = await axios.get("https://www.taxidermyadmin.hunt30.com/api/Extension/getAll");
+      const response = await axios.get("https://www.taxiadmin.hunt30.com/api/Extension/getAll");
       setExtensions(response.data.data);
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while fetching extensions.");
@@ -69,7 +69,7 @@ const Extension = () => {
     if (formVisible) {
       const fetchSpecies = async () => {
         try {
-          const response = await axios.get("https://www.taxidermyadmin.hunt30.com/api/species/getSpeciesCategories/");
+          const response = await axios.get("https://www.taxiadmin.hunt30.com/api/species/getSpeciesCategories/");
           setSpeciesOptions(response.data.data);
         } catch (err) {
           setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
@@ -103,7 +103,7 @@ const Extension = () => {
     }
 
     try {
-      const response = await axios.post("https://www.taxidermyadmin.hunt30.com/api/extension/addExtension", formDataToSend, {
+      const response = await axios.post("https://www.taxiadmin.hunt30.com/api/extension/addExtension", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -140,7 +140,7 @@ const Extension = () => {
 
   const handleEditSubmit = async () => {
     setLoading(true);
-    const apiUrl = `https://www.taxidermyadmin.hunt30.com/api/Extension/editeExten/${selectedItem._id}`;
+    const apiUrl = `https://www.taxiadmin.hunt30.com/api/Extension/editeExten/${selectedItem._id}`;
 
     const formData = new FormData();
     formData.append('extensionName', editedItem.name);

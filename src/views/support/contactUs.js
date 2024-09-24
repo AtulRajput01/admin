@@ -14,7 +14,7 @@ const Contact = () => {
 
   const fetchMessages = async (filter) => {
     try {
-      const response = await axios.post(`https://www.taxidermyadmin.hunt30.com/api/getContact`,{read:filter});
+      const response = await axios.post(`https://www.taxiadmin.hunt30.com/api/getContact`,{read:filter});
       setMessages(response.data.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -23,7 +23,7 @@ const Contact = () => {
 
   const handleToggleRead = async (id, status) => {
     try {
-      await axios.put(`https://www.taxidermyadmin.hunt30.com/api/updateContact/${id}`, { read: status });
+      await axios.put(`https://www.taxiadmin.hunt30.com/api/updateContact/${id}`, { read: status });
       setMessages(prevMessages =>
         prevMessages.map(message =>
           message._id === id ? { ...message, read: status } : message
