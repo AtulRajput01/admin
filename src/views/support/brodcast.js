@@ -11,7 +11,7 @@ import {
   CFormTextarea,
   CContainer,
   CFormSelect,
-  CSpinner // Import the spinner component for the loader
+  CSpinner
 } from '@coreui/react';
 
 const Broadcast = () => {
@@ -21,7 +21,7 @@ const Broadcast = () => {
     body: '',
     role: '',
   });
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
 
   const handleNewNotificationChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +36,7 @@ const Broadcast = () => {
   };
 
   const handleSendNotification = async () => {
-    setLoading(true); // Set loading to true when starting the request
+    setLoading(true);
     const newNotif = {
       ...newNotification,
       timestamp: new Date().toLocaleString(),
@@ -60,7 +60,7 @@ const Broadcast = () => {
     } catch (error) {
       console.error('Error sending notification:', error);
     } finally {
-      setLoading(false); // Set loading to false after the request is complete
+      setLoading(false); 
     }
   };
 
