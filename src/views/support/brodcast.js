@@ -43,7 +43,7 @@ const Broadcast = () => {
     };
 
     try {
-      const response = await fetch('http://54.244.180.151:3002/api/admin/sendN', {
+      const response = await fetch('www.taxidermyadmin.hunt30.com/api/admin/sendN', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

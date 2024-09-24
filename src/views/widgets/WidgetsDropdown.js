@@ -27,7 +27,7 @@ const WidgetsDropdown = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://54.244.180.151:3002/api/admin/dashboard'); 
+        const response = await axios.get('www.taxidermyadmin.hunt30.com/api/admin/dashboard'); 
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
