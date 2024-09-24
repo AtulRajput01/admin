@@ -16,7 +16,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://www.taxidermyadmin.hunt30.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://54.71.141.115:3002';
 
 const Register = () => {
   const [username, setUsername] = useState('');

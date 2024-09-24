@@ -44,7 +44,7 @@ const OrderDetails = () => {
 
   const fetchOrderDetails = async () => {
     try {
-      const response = await axios.get('https://www.taxidermyadmin.hunt30.com/api/OrderDetails/');
+      const response = await axios.get('http://54.71.141.115:3002/OrderDetails/');
       setOrderDetails(response.data);
       setLoading(false);
     } catch (error) {
@@ -74,7 +74,7 @@ const OrderDetails = () => {
 
   const handleUpdateStatus = async () => {
     try {
-      const response = await axios.put(`https://www.taxidermyadmin.hunt30.com/api/OrderDetails/${selectedOrder._id}`, { status: newStatus });
+      const response = await axios.put(`http://54.71.141.115:3002/OrderDetails/${selectedOrder._id}`, { status: newStatus });
       setSelectedOrder({ ...selectedOrder, status: newStatus });
       setOrderDetails((prevDetails) =>
         prevDetails.map((order) =>

@@ -12,7 +12,7 @@ const feedback = () => {
   }, []);
 
   const fetchMessage=async()=>{
-    const response = await axios.get(`https://www.taxidermyadmin.hunt30.com/api/getFeedback`);
+    const response = await axios.get(`http://54.71.141.115:3002/getFeedback`);
     setMessage(response.data.data)
   };
  

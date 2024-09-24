@@ -22,7 +22,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons';
 // Import your image here
 import logoImage from '../../../../public/logo/tlogo1.png'; // Replace with your actual image path
 
-const API_URL = 'https://www.taxidermyadmin.hunt30.com/api/admin/login'; // Backend API URL
+const API_URL = 'http://54.71.141.115:3002/admin/login'; // Backend API URL
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
