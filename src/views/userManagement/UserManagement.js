@@ -42,7 +42,7 @@ const UserManagement = () => {
 
   const fetchUsers = async (searchUser) => {
     try {
-      const response = await axios.post("http://54.71.141.115:3002/api/vendor/getUser", { search: searchUser });
+      const response = await axios.post("https://www.taxidermyadmin.hunt30.com/api/vendor/getUser", { search: searchUser });
       setUsers(response.data.data);
     } catch (error) {
       setError("Error fetching users");
@@ -52,7 +52,7 @@ const UserManagement = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://54.71.141.115:3002/api/vendor/deleteUser/${id}`);
+      await axios.delete(`https://www.taxidermyadmin.hunt30.com/api/vendor/deleteUser/${id}`);
       setUsers(users.filter((user) => user._id !== id));
     } catch (error) {
       setError("Error deleting user");

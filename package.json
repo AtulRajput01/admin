@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://54.71.141.115:3002/api/$",
+  "proxy": "https://www.taxidermyadmin.hunt30.com/api/$",
   "dependencies": {
     "@coreui/chartjs": "^4.0.0",
     "@coreui/coreui": "^5.0.0",
