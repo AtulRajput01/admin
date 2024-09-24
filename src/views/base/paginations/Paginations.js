@@ -144,7 +144,7 @@ const Paginations = () => {
           <CCardBody>
             <p className="text-body-secondary small">
               Change the alignment of pagination components with{' '}
-              <a href="https://coreui.io/docs/utilities/flex/">flexbox utilities</a>.
+              <a href="httpss://coreui.io/docs/utilities/flex/">flexbox utilities</a>.
             </p>
             <DocsExample href="components/pagination#aligment">
               <CPagination className="justify-content-center" aria-label="Page navigation example">

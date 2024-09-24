@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       proxy: {
-        // https://vitejs.dev/config/server-options.html
+        // httpss://vitejs.dev/config/server-options.html
       },
     },
   }

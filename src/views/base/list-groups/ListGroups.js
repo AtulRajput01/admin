@@ -265,7 +265,7 @@ const ListGroups = () => {
           <CCardBody>
             <p className="text-body-secondary small">
               Add nearly any HTML within, even for linked list groups like the one below, with the
-              help of <a href="https://coreui.io/docs/utilities/flex/">flexbox utilities</a>.
+              help of <a href="httpss://coreui.io/docs/utilities/flex/">flexbox utilities</a>.
             </p>
             <DocsExample href="components/list-group/#custom-content">
               <CListGroup>

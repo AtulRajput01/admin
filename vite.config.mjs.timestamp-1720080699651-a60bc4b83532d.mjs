@@ -50,7 +50,7 @@ var vite_config_default = defineConfig(({ mode }) => {
     server: {
       port: 3e3,
       proxy: {
-        // https://vitejs.dev/config/server-options.html
+        // httpss://vitejs.dev/config/server-options.html
       }
     }
   };

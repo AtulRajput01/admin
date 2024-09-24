@@ -14,7 +14,7 @@ const Progress = () => {
             <p className="text-body-secondary small">
               Progress components are built with two HTML elements, some CSS to set the width, and a
               few attributes. We don&#39;tuse{' '}
-              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">
+              <a href="httpss://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">
                 the HTML5 <code>&lt;progress&gt;</code> element
               </a>
               , ensuring you can stack progress bars, animate them, and place text labels over them.

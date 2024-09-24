@@ -77,7 +77,7 @@ const CNavbars = () => {
           <CNavbar color="faded" light>
             <CNavbarBrand>
               <CImage
-                src="https://placekitten.com/g/30/30"
+                src="httpss://placekitten.com/g/30/30"
                 className="d-inline-block align-top"
                 alt="CoreuiVue"
               />
