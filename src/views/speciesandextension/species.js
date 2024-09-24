@@ -41,7 +41,7 @@ const Species = () => {
 
   const fetchSpecies = async () => {
     try {
-      const response = await axios.get("http://54.71.141.115:3002/species/getSpeciesCategories");
+      const response = await axios.get("http://54.71.141.115:3002/api/species/getSpeciesCategories");
       setSpecies(response.data.data); // Assuming the API response contains the species data
     } catch (err) {
       setError(err.response ? err.response.data.message : "An error occurred while fetching species.");
@@ -67,7 +67,7 @@ const Species = () => {
 
 
     try {
-      await axios.post("http://54.71.141.115:3002/species/SpeciesCategories", formDataToSend, {
+      await axios.post("http://54.71.141.115:3002/api/species/SpeciesCategories", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -92,7 +92,7 @@ const Species = () => {
     }
 
     try {
-      await axios.put(`http://54.71.141.115:3002/species/speciescategory/${selectedSpecies._id}`, formDataToSend, {
+      await axios.put(`http://54.71.141.115:3002/api/species/speciescategory/${selectedSpecies._id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

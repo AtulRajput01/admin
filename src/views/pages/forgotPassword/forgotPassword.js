@@ -28,7 +28,7 @@ const Login = () => {
 
 //   const handleLogin = async () => {
 //     try {
-//       const response = await axios.post('http://54.71.141.115:3002/auths/login', {
+//       const response = await axios.post('http://54.71.141.115:3002/api/auths/login', {
 //         email,
 //         password,
 //       });

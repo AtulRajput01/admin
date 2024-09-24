@@ -40,7 +40,7 @@ const SubscriptionPlansPage = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axios.get('http://54.71.141.115:3002/subscription');
+        const response = await axios.get('http://54.71.141.115:3002/api/subscription');
         setPlans(response.data.data);
       } catch (error) {
         console.error('Failed to fetch plans:', error.message);
@@ -74,12 +74,12 @@ const SubscriptionPlansPage = () => {
 
     try {
       if (isEditing) {
-        await axios.put(`http://54.71.141.115:3002/subscription/${formData._id}`, {
+        await axios.put(`http://54.71.141.115:3002/api/subscription/${formData._id}`, {
           ...formData,
           features: formData.features.split(',').map(feature => feature.trim())
         });
       } else {
-        const response = await axios.post('http://54.71.141.115:3002/subscription', {
+        const response = await axios.post('http://54.71.141.115:3002/api/subscription', {
           ...formData,
           features: formData.features.split(',').map(feature => feature.trim())
         });
@@ -104,7 +104,7 @@ const SubscriptionPlansPage = () => {
 
   const handleDeletePlan = async (id) => {
     try {
-      await axios.delete(`http://54.71.141.115:3002/subscription/${id}`);
+      await axios.delete(`http://54.71.141.115:3002/api/subscription/${id}`);
       setPlans(plans.filter(plan => plan._id !== id));
       handleAddPlan()
     } catch (error) {

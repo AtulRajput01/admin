@@ -12,7 +12,7 @@ const PaymentList = () => {
     // Fetch payments data from API
     const fetchPayments = async () => {
       try {
-        const response = await fetch('http://54.71.141.115:3002/payments');
+        const response = await fetch('http://54.71.141.115:3002/api/payments');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
